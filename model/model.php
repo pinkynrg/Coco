@@ -6,57 +6,11 @@
 	if (!class_exists("PHPExcel")) 	require("view/PHPExcel/PHPExcel.php");	
 
 	class Model {
+
 		function __construct($controller) {
 			$this->controller = $controller;
 			$this->db = new DB();
 			$this->csvHelper = new smartCSV();
-		}
-
-		function checkAuth() {
-
-			$username = $_POST['username'];
-			$password = $_POST['password'];
-
-			if (isset($username)&&(isset($password))) {
-				if (($username!="")&&($password!="")) {
-
-					$conn = new PDO('mysql:dbname='.info::$DB_SCHEMA.';host='.info::$DB_HOST.';charset=utf8', info::$DB_USER, info::$DB_PASS);
-					$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-					$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-					$query = $conn->prepare("SELECT * FROM `users` WHERE `username` = :username AND `password` = :password");
-
-					$query->bindParam(':username', $_POST['username']);
-					$query->bindParam(':password', $_POST['password']);
-
-					$query->execute();
-
-					$query_result = $query->fetch();
-
-					if ($query_result['username'] != "") {
-						$this->setupSession($query_result['username'], $query_result['name'], $query_result['lastname'], $query_result['access_level']);
-						$result = new alert(1,"Accesso effettuato con successo.");
-					} 
-					else $result = new alert(0,"Nome utente e / o password errato.");
-				}
-				else
-					$result = new alert(2,"Campi vuoti non validi.");
-			}
-			else
-				$result = new alert(2,"Campi nulli non validi.");;
-
-			return $result;
-		}
-
-		function setupSession($username, $firstname, $lastname, $access_level) {
-			$_SESSION['username']  = $username;
-			$_SESSION['firstname'] = $firstname;
-			$_SESSION['lastname']  = $lastname;
-			$_SESSION['access_level'] = $access_level;
-		}
-
-		function getSession() {
-			return isset($_SESSION['username']);
 		}
 
 		function dropTable($name) {
@@ -115,6 +69,53 @@
 			}
 
 			return $result;
+		}
+
+		function checkAuth() {
+
+			$username = $_POST['username'];
+			$password = $_POST['password'];
+
+			if (isset($username)&&(isset($password))) {
+				if (($username!="")&&($password!="")) {
+
+					$conn = new PDO('mysql:dbname='.info::$DB_SCHEMA.';host='.info::$DB_HOST.';charset=utf8', info::$DB_USER, info::$DB_PASS);
+					$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+					$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+					$query = $conn->prepare("SELECT * FROM `users` WHERE `username` = :username AND `password` = :password");
+
+					$query->bindParam(':username', $_POST['username']);
+					$query->bindParam(':password', $_POST['password']);
+
+					$query->execute();
+
+					$query_result = $query->fetch();
+
+					if ($query_result['username'] != "") {
+						$this->setupSession($query_result['username'], $query_result['name'], $query_result['lastname'], $query_result['access_level']);
+						$result = new alert(1,"Accesso effettuato con successo.");
+					} 
+					else $result = new alert(0,"Nome utente e / o password errato.");
+				}
+				else
+					$result = new alert(2,"Campi vuoti non validi.");
+			}
+			else
+				$result = new alert(2,"Campi nulli non validi.");;
+
+			return $result;
+		}
+
+		function setupSession($username, $firstname, $lastname, $access_level) {
+			$_SESSION['username']  = $username;
+			$_SESSION['firstname'] = $firstname;
+			$_SESSION['lastname']  = $lastname;
+			$_SESSION['access_level'] = $access_level;
+		}
+
+		function getSession() {
+			return isset($_SESSION['username']);
 		}
 
 		function getFile($types = array(), $extentions = array(), $size = 1048576) {
@@ -188,149 +189,6 @@
 			
 			} else $result = new alert(0,"Problemi con la conversione del file CSV.");
 
-			return $result;
-		}
-
-		function updateAccessLevels() {
-			$counter = count($_POST)/2;
-
-			for ($i = 0; $i < $counter; $i++) {
-
-				$query =  "UPDATE `users` SET `access_level`='".$_POST["level_".$i]."'";
-				$query .= "WHERE `id`='".$_POST["id_".$i]."'";
-				
-				$this->db->setQuery($query);
-				$result = $this->db->query(); 
-
-				if ($result->type)
-					$result = new alert(1,"Aggiornamento degli accessi effettuato con successo.");
-			}
-
-			return $result;
-		}
-
-		function updateCalendar() {
-			$counter = count($_POST)/9;
-
-			for ($i = 0; $i < $counter; $i++) {
-
-				$query = "UPDATE `missions` SET `agente`='".$_POST["agent_".$i]."', `esito1`='".$_POST["outcome1_id_".$i]."',  `esito2`='".$_POST["outcome2_id_".$i]."', `esito3`='".$_POST["outcome3_id_".$i]."', `status`='".$_POST["status_".$i]."'";
-				$query .= ($_POST["date1_".$i] != '') ? ", `data1`=STR_TO_DATE('".$_POST["date1_".$i]."','%d/%m/%y')" : ", `data1`=NULL";
-				$query .= ($_POST["date2_".$i] != '') ? ", `data2`=STR_TO_DATE('".$_POST["date2_".$i]."','%d/%m/%y')" : ", `data2`=NULL";
-				$query .= ($_POST["date3_".$i] != '') ? ", `data3`=STR_TO_DATE('".$_POST["date3_".$i]."','%d/%m/%y')" : ", `data3`=NULL";
-				$query .= " WHERE `ragione_sociale`='".$_POST["mission_".$i]."'";
-				
-				$this->db->setQuery($query);
-				$this->db->query();
-			}
-
-			return new alert(1,"Modifiche effettuate con successo.");
-		}
-
-		function addMission() {
-			if ($_POST['agenzia']!='')
-				if($_POST['agente']!='')
-					if($_POST['ragione_sociale']!='')
-						if ($_POST['provincia']!='')
-							if ($_POST['telefono']!='')
-								if ($_POST['referente']!='')
-									if ($_POST['ruolo']!='')
-										if($_POST['data']!='')
-											if ($_POST['ora']!='') {
-												
-												$query = "INSERT INTO missions (`agenzia`, `ragione_sociale`, `indirizzo`, `comune`, `provincia`, `telefono`, `referente`, `ruolo`, `data1`, `agente`, `esito1`) VALUES ('".$_POST['agenzia']."', '".$_POST['ragione_sociale']."', '".$_POST['indirizzo']."', '".$_POST['comune']."', '".$_POST['provincia']."', '".$_POST['telefono']."', '".$_POST['referente']."', '".$_POST['ruolo']."', STR_TO_DATE('".$_POST['data']."','%d/%m/%y'), '".$_POST['agente']."', '".$_POST['esito']."');";
-												$this->db->setQuery($query);
-												$result = $this->db->query();
-												if ($result->type) $result = new alert(1,"Missione aggiunta con successo.");
-											}
-											else $result = new alert(0,"L'ora della missione deve essere inserita.");
-										else $result = new alert(0,"La data dell'appuntamento deve essere inserita.");
-									else $result = new alert(0,"Il ruolo del referente deve essere inserito.");
-								else $result = new alert(0,"Il referente deve essere inserito.");
-							else $result = new alert(0,"Il telefono dev'essere inserito.");
-						else $result = new alert(0,"La provincia deve essere inserita.");						
-					else $result = new alert(0,"La ragione sociale deve essere inserita.");
-				else $result = new alert(0,"L'agente responsabile a questa missione dev'essere selezionato.");
-			else $result = new alert(0,"L'agenzia emettente la missione dev'essere inserita.");
-
-			return $result;
-		}
-
-		function uploadMissions() {
-			$types = array("text/csv","text/txt","application/vnd.ms-excel");
-			$exts = array("csv");
-			$cols = 12;
-			$added = 0;
-
-			$result = $this->getFile($types,$exts);
-
-			if ($result->type == 1) {
-				$csv = $this->file;
-				$contents = $this->csvHelper->CSVtoArray($csv, ",");
-				if ( isset($contents[0]) && (count($contents[0])<2) )
-					$contents = $this->csvHelper->CSVtoArray($csv, ";");
-
-				foreach($contents as $key=>$row) {
-					foreach($row as $key2=>$elem) {
-						$contents[$key][$key2] = iconv( "Windows-1252", "UTF-8", addslashes($contents[$key][$key2]));
-					}
-				}
-
-				if (isset($contents[0])) {
-					if (count($contents[0]) == 12) {
-						
-						unset($contents[0]);
-						$contents = array_values($contents);
-
-						for($i=0; $i<count($contents); $i++) {
-
-							$query = "SELECT count(*) as count FROM missions WHERE ragione_sociale = '".$contents[$i][2]."'";
-							$this->db->setQuery($query);
-							$this->db->query();
-
-							if (!($this->db->result[0]->count)) {
-
-								if ($contents[$i][0]!='') {
-									$query = "SELECT id FROM agencies WHERE agency LIKE '%".trim($contents[$i][0])."%'";
-									$this->db->setQuery($query);
-									$this->db->query();
-									$contents[$i][0] = isset($this->db->result[0]->id) ? $this->db->result[0]->id : "?";
-								}
-
-								if ($contents[$i][1]!='') {
-									$query = "SELECT id FROM agents WHERE nome_agente LIKE '%".trim($contents[$i][1])."%'";
-									$this->db->setQuery($query);
-									$this->db->query();
-									$contents[$i][1] = isset($this->db->result[0]->id) ? $this->db->result[0]->id : "?";
-								}
-
-								if ($contents[$i][11]!='') {
-									$query = "SELECT id FROM outcomes WHERE outcome LIKE '%".trim($contents[$i][11])."%'";
-									$this->db->setQuery($query);
-									$this->db->query();
-									$contents[$i][11] = isset($this->db->result[0]->id) ? $this->db->result[0]->id : "?";
-								}
-
-								$query = "INSERT INTO missions (`agenzia`, `ragione_sociale`, `indirizzo`, `comune`, `provincia`, `telefono`, `referente`, `ruolo`, `data1`, `agente`, `esito1`) VALUES ('".$contents[$i][0]."', '".$contents[$i][2]."', '".$contents[$i][3]."', '".$contents[$i][4]."', '".$contents[$i][5]."', '".$contents[$i][6]."', '".$contents[$i][7]."', '".$contents[$i][8]."', STR_TO_DATE('".$contents[$i][9]."','%d/%m/%Y'), '".$contents[$i][1]."', '".$contents[$i][11]."');";
-								$this->db->setQuery($query);
-								
-								if ($this->db->query()) {
-									$added++;
-									$result = new alert(1,"Inserimento di ".$added." nuovi appuntamenti avvenuto con successo.");
-								}
-							}
-						}
-
-						if ($added == 0)
-							$result = new alert(2,"Non sono stati inseriti nuovi appuntamenti. File privo di nuove informazioni.");
-						else
-							$result = new alert(1,"Inserimento di ".$added." nuovi appuntamenti avvenuto con successo.");
-
-					} else $result = new alert(0,"Il numero di colonne del CSV incorretto. Il numero delle colonne dev'essere ".$cols." ed ora &egrave; ".count($contents[0]));
-				
-				} else $result = new alert(2,"Il file CSV &egrave; risulta vuoto. Non sono stati inseriti dati.");
-
-			}
 			return $result;
 		}
 
@@ -532,41 +390,6 @@
 
 				$handle = fopen($path."/menu.json","wb");
 				$result = fwrite($handle, json_encode($nodes));
-			}
-		}
-
-		function downloadExcel() {
-		
-			if (isset($_SESSION['matrix'])) {
-
-				$data = $_SESSION['matrix'];
-
-				$data = array(array(1,2,3),array(4,5,6),array(7,8,9));
-
-				$objPHPExcel = new PHPExcel();
-
-				$objPHPExcel->getActiveSheet()->fromArray($data, NULL, 'A1');
-
-				header_remove('Cache-Control');
-				header_remove('Content-Length');
-				// Redirect output to a clients web browser (Excel5)
-				header('Content-Type: application/vnd.ms-excel');
-				header('Content-Disposition: attachment;filename="test.xls"');
-				header('Cache-Control: max-age=0');
-				// If you're serving to IE 9, then the following may be needed
-				header('Cache-Control: max-age=1');
-
-				// If you're serving to IE over SSL, then the following may be needed
-				header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-				header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-				header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-				header ('Pragma: public'); // HTTP/1.0
-
-				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-				$objWriter->save("php://output");
-
-				die();
-			
 			}
 		}
 	}

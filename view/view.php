@@ -59,10 +59,6 @@
 			return $menu;
 		}
 
-		function getLabel($path) {
-			return ucfirst(str_replace(".php", "", $path));
-		}
-
 		function getPageTitle() {
 			return $this->pageTitle;
 		}

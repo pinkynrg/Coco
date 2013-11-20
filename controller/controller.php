@@ -1,7 +1,7 @@
 <?php 
 
 	if (!class_exists("view")) 		require("view/view.php");
-	if (!class_exists("model")) 	require("model/model.php");
+	if (!class_exists("model")) 	require("model/frontModel.php");
 
 	class Controller {
 
@@ -10,7 +10,7 @@
 			session_start();
 
 			$this->View  = new View($this);
-			$this->Model = new Model($this);
+			$this->Model = new frontModel($this);
 			$this->route = (isset($_GET['route']) && $this->route($_GET['route'])) ? $this->route($_GET['route']) : "content";
 			$this->url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 			
