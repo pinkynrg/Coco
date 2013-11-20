@@ -9,10 +9,10 @@
 		static $DB_SCHEMA 	= "pannello_fastweb2";
 
 		//general infos
-		static $PAGE_TITLE 	= "Pannello Agenti Fastweb";
-		static $TITLE 		= "Pannello Agenti Fastweb <span style='font-size:14px;'>v1.1</span>";
-		static $ALIAS 		= "pannello-agenti-fastweb";
-		static $FOOTER 		= "All right reserved - newline S.p.a.";
+		static $PAGE_TITLE 	= "Coco";
+		static $TITLE 		= "Coco <span style='font-size:14px;'>v1.1</span>";
+		static $ALIAS 		= "coco";
+		static $FOOTER 		= "All right reserved - coco";
 
 		//labels
 		static $MENU_LABEL 		= "Menu";

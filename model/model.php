@@ -472,7 +472,7 @@
 			$handle = @fopen($root."/menu.json","wb");
 				
 			if ($handle)
-				$result = fwrite($handle, json_encode($map,JSON_PRETTY_PRINT));
+				$result = fwrite($handle, json_encode($map));
 			else 
 				
 
