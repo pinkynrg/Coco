@@ -33,6 +33,7 @@ $table->setColors($colors);
 $table->setOrderLinks($orders);
 $table->setInputs($inputs);
 
+echo $this->View->getSearchbox();
 echo "<form method='POST' action=''>";
 echo "<input type='hidden' value='updateAccessLevels' name='action'>";
 echo $table->getTable();

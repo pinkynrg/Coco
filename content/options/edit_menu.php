@@ -29,6 +29,7 @@ $table->setColors($colors);
 $table->setInputs($inputs);
 
 echo "<br>";
+echo $this->View->getSearchbox();
 echo "<form method='POST' action=''>";
 echo "<input type='hidden' value='updateMenu' name='action'>";
 echo $table->getTable();

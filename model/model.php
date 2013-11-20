@@ -392,5 +392,23 @@
 				$result = fwrite($handle, json_encode($nodes));
 			}
 		}
+
+		function updateAccessLevels() {
+			$counter = count($_POST)/2;
+
+			for ($i = 0; $i < $counter; $i++) {
+
+				$query =  "UPDATE `users` SET `access_level`='".$_POST["level_".$i]."'";
+				$query .= "WHERE `id`='".$_POST["id_".$i]."'";
+				
+				$this->db->setQuery($query);
+				$result = $this->db->query(); 
+
+				if ($result->type)
+					$result = new alert(1,"Aggiornamento degli accessi effettuato con successo.");
+			}
+
+			return $result;
+		}
 	}
 ?>
