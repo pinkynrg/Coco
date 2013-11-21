@@ -37,13 +37,10 @@
 					case 'logout' 	 			: unset($_SESSION['username']); session_destroy(); $this->result = new alert(1, "Logout effettuato con successo."); break;
 					case 'updateAccessLevels'	: $this->result = $this->Model->updateAccessLevels();			break;
 					case 'updateMenu' 			: $this->result = $this->Model->updateMenu(); 					break;
-					case 'updateCalendar'		: $this->result = $this->Model->updateCalendar(); 				break;
-					case 'uploadMissions'		: $this->result = $this->Model->uploadMissions();				break;
-					case 'addMission' 			: $this->result = $this->Model->addMission();					break;
-					case 'downloadExcel' 		: $this->result = $this->Model->downloadExcel();		 		break;
 					case 'backup'				: $this->result = $this->Model->backup();		 				break;
 					case 'restoreBackup' 		: $this->result = $this->Model->restoreBackup(); 				break;
 					case 'pullMenu' 			: $this->result = $this->Model->pullMenu(info::$CONTENT_ROOT);	break;
+					case 'addUser' 				: $this->result = $this->Model->addUser();						break;
 					default : break;
 				}
 		}

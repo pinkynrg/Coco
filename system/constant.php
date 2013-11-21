@@ -7,12 +7,13 @@
 		static $DB_USER 	= "root";
 		static $DB_PASS 	= "dir2004caz";
 		static $DB_SCHEMA 	= "pannello_fastweb2";
+		static $DB_PREFIX 	= "";
 
 		//general infos
-		static $PAGE_TITLE 	= "Coco";
-		static $TITLE 		= "Coco <span style='font-size:14px;'>v1.1</span>";
-		static $ALIAS 		= "coco";
-		static $FOOTER 		= "All right reserved - coco";
+		static $PAGE_TITLE 	= "COCO";
+		static $TITLE 		= "COCO <span style='font-size:14px;'>alpha</span>";
+		static $ALIAS 		= "COCO";
+		static $FOOTER 		= "All right reserved - COCO";
 
 		//labels
 		static $MENU_LABEL 		= "Menu";

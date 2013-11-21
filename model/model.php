@@ -323,7 +323,6 @@
 				$map->{$node}->order = isset($old_map->{$node}->order) ? $old_map->{$node}->order : $counter;
 				$map->{$node}->perms = isset($old_map->{$node}->perms) ? $old_map->{$node}->perms : "10000";
 
-				
 				$counter++;
 			}
 			
@@ -332,7 +331,8 @@
 			if ($handle)
 				$result = fwrite($handle, json_encode($map));
 			else 
-				
+				$result = new alert(0,"Ci sono stati problemi a creare i file menu.json.");
+
 
 			foreach($scan as $node) {
 				if (is_dir($root."/".$node)) {
@@ -408,6 +408,38 @@
 					$result = new alert(1,"Aggiornamento degli accessi effettuato con successo.");
 			}
 
+			return $result;
+		}
+
+		function addUser() {
+			if ($_POST['nome'] != '')
+				if ($_POST['cognome'] != '')
+					if ($_POST['username'] != '')
+						if ($_POST['email'] != '')
+							if ($_POST['password'] != '')
+								if ($_POST['password2'] != '')
+									if ($_POST['password'] == $_POST['password2']) 
+										if ($_POST['access_level'] != '') {
+											$query = "INSERT INTO users (username,password,name, lastname,access_level) VALUES('".$_POST['username']."','".$_POST['password']."','".$_POST['nome']."','".$_POST['cognome']."','".$_POST['access_level']."')";
+											$this->db->setQuery($query);
+											$result = $this->db->query();
+											if ($result->type != 0) {
+												$result = new alert(1, "Nuovo utente inserito con successo");
+											}
+										}
+										else {
+											$result = new alert(0, "La tipologia di accesso deve essere inserita");
+										}
+									else { 
+										$result = new alert(0, "La password ed il suo riscontro devono coincidere"); 
+									}
+								else $result = new alert(0,"Il riscontro della password deve essere inserito");
+							else $result = new alert(0,"La password deve essere inserita");
+						else $result = new alert(0, "L'e-mail dev'essere inserita");
+					else $result = new alert(0, "Lo username deve essere inserito");
+				else $result = new alert(0,"Il cognome deve essere inserito");
+			else $result = new alert(0,"Il nome utente deve essere inserito");
+		
 			return $result;
 		}
 	}

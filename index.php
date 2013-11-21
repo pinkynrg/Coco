@@ -3,9 +3,7 @@
 	require("system/constant.php");
 	require("system/settings.php");
 	require("controller/controller.php");
-?>
-
-<?php 
+ 
 	$Controller = new Controller();
 	$Controller->catchBackgroundAction();
 ?>
