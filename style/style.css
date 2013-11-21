@@ -23,7 +23,7 @@ form.short label {
 	width: 180px;
 }
 
-form.short select, form.short input[type='text'] {
+form.short select, form.short input[type='text'], form.short input[type='password']  {
 	width: 200px;
 	margin: 0px;
 }
@@ -95,6 +95,42 @@ h2, h3, h4, h5 {
 	line-height: 25px;
 }
 
+.setup_wrapper {
+	margin: auto;
+	margin-top: 50px;
+	width: 800px;
+	height: auto;
+	background-color: white;
+	border-top: 1px solid #D6D6D6;
+	border-bottom: 1px solid #D6D6D6;	
+}
+
+.setup {
+	padding: 20px 50px 40px 50px;
+}
+
+.setup label {
+	display: inline-block;
+	width: 160px;
+}
+
+.setup div {
+	margin: 20px 0px 20px 0px;
+}
+
+.setup p {
+	margin: 30px 0px 30px 0px;
+	font-size: 14px;
+}
+
+.setup span {
+	color: #AAAAAA;
+}
+
+.setup #save_button {
+	text-align: center;
+}
+
 .load_file {
 	padding : 20px 10px 20px 10px;
 	margin: 15px 0px 15px 0px;
@@ -102,18 +138,19 @@ h2, h3, h4, h5 {
 	border: 1px solid #9BABEE;
 }
 
-.auth_panel input[type='text'], .auth_panel input[type='password'] {
+.auth_panel input[type='text'], .auth_panel input[type='password'], .setup input[type='text'], .setup input[type='password'] {
 	width: 200px;
 	height: 25px;
 	font-size: 16px;
 	color: #555555;
+	margin-right: 20px;
 }
 
 .auth_panel input[type='submit'] {
 	width: 70px;
 }
 
-.auth_panel .auth_row {
+.auth_panel div {
 	margin: 20px 0px 20px 0px;
 }
 
@@ -141,7 +178,8 @@ h2, h3, h4, h5 {
 	padding:0px;
 	float:left;
 	vertical-align: top;
-	background-color: #FFFFFF;
+	background: url('/images/logo2.png') no-repeat left center;
+	background-size: 500px;
 	width: 84%;	
 	min-height: 500px;
 }
@@ -271,6 +309,7 @@ h2, h3, h4, h5 {
 
 .list .row_list {
 	font-size: 10px;
+	background-color: #FFFFFF;
 	border-bottom: 1px dashed #BBBBBB;
 }
 

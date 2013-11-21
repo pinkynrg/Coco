@@ -38,7 +38,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 
-INSERT INTO users VALUES('1','pinkynrg','dir2004caz','Francesco','Meli','0');
+INSERT INTO users VALUES('0','admin','12345678','Admin','','0');
 
 UNLOCK TABLES;
 

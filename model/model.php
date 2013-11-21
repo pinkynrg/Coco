@@ -71,6 +71,64 @@
 			return $result;
 		}
 
+		function setupConstants() {
+			if ($_POST['db_name'] != '')
+				if ($_POST['db_user'] != '')
+					if ($_POST['db_pass'] != '')
+						if ($_POST['db_host'] != '') {
+					 		
+					 		$con = @mysqli_connect($_POST['db_host'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_name']);
+					 		
+							if ($err = mysqli_error($con))
+								$return = new alert(0,"Qualcosa &egrave; andato storto con la connessione al server: ".$err);
+							else {			 		
+					 			$this->createConstantFile($_POST['db_name'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_host'], $_POST['db_prefix']);
+					 			$this->createDB($con);
+					 			$return = new alert(1,"Salvataggio dei dati d'accesso effetuati con successo");
+							}	
+					 	} 
+						else $return = new alert(0,"L'host deve essere inserito");
+					else $return = new alert(0,"La password di accesso deve essere inserita");
+				else $return = new alert(0,"Il nome utente deve essere inserito");
+			else $return = new alert(0,"Il nome del database deve essere inserito");
+		
+			return $return;
+		}
+
+		function createDB($con) {
+			$queries = file_get_contents("mysql/db.sql");
+			$queries = explode(";",$queries);
+			$result = true;
+
+			foreach($queries as $query) {
+				if (trim($query)) {
+					if ($result)
+						$result = mysqli_query($con, $query);
+				}
+			}
+
+			if ($result)
+				$result = new alert(1,"Inizzializzazione del DB completata");
+			else
+				$result = new alert(0,"Qualcosa e' andato storto con la creazione del DB: ".mysqli_error($con));
+
+			return $result;
+		}
+
+		function createConstantFile($db_name, $db_user, $db_pass, $db_host, $db_prefix) {
+			$constants = new stdClass();
+			$constants->db_name = $db_name;
+			$constants->db_user = $db_user;
+			$constants->db_pass = $db_pass;
+			$constants->db_host = $db_host;
+			$constants->db_prefix = $db_prefix;
+
+			$content = json_encode($constants);
+
+			$handle = fopen("system/constant.json", 'w');
+			$result = fwrite($handle, $content);
+		}
+
 		function checkAuth() {
 
 			$username = $_POST['username'];
@@ -282,7 +340,7 @@
 		function scanDirectory($dir, $show_all = false) {
 			$scan = scandir($dir);
 			$accepted = array("directory","text/x-php","text/html","text/plain","inode/x-empty");
-			$black_list = array(".","..","download_excel.php","home.php","menu.json","how_to_csv.php");
+			$black_list = array(".","..","menu.json","index.php");
 
 			foreach($scan as $key => $node) {
 				if (!in_array(finfo_file(finfo_open(FILEINFO_MIME_TYPE),$dir."/".$node), $accepted)) {
@@ -390,7 +448,16 @@
 
 				$handle = fopen($path."/menu.json","wb");
 				$result = fwrite($handle, json_encode($nodes));
+
+				if ($result) {
+					$result = new alert(1,"Modifiche effettuate con successo");
+				} 
+				else {
+					$result = new alert(0,"Errore nell'effettuare le modifiche");
+				}
 			}
+
+			return $result;
 		}
 
 		function updateAccessLevels() {

@@ -4,6 +4,8 @@ class DB {
 
 	function __construct() {
 		
+		info::sync();
+
 		$this->thin = false;
 		
 		$this->con = mysqli_connect(info::$DB_HOST , info::$DB_USER , info::$DB_PASS , info::$DB_SCHEMA);
@@ -11,7 +13,7 @@ class DB {
 		$this->con->set_charset("utf8");
 		
 		if ($this->err = mysqli_connect_errno($this->con))
-			return "Error: failed to connect to MySQL: ".mysqli_connect_error().".";
+			return "Error: failed to connect to MySQL: ".mysqli_error($con).".";
 		else 
 			return "Connection established.";
 	}

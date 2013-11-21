@@ -29,8 +29,10 @@
 
 		function catchBackgroundAction() {
 
-			if 	($this->action == 'checkAuth') 
-				$this->result = $this->Model->checkAuth();
+			switch ($this->action) {
+				case 'setup' 					: $this->result = $this->Model->setupConstants();	break;
+				case 'checkAuth' 				: $this->result = $this->Model->checkAuth(); 		break;
+			}
 
 			if ($this->getSession())
 				switch ($this->action) {
@@ -40,7 +42,7 @@
 					case 'backup'				: $this->result = $this->Model->backup();		 				break;
 					case 'restoreBackup' 		: $this->result = $this->Model->restoreBackup(); 				break;
 					case 'pullMenu' 			: $this->result = $this->Model->pullMenu(info::$CONTENT_ROOT);	break;
-					case 'addUser' 				: $this->result = $this->Model->addUser();						break;
+					case 'addUser' 				: $this->result = $this->Model->addUser();							break;
 					default : break;
 				}
 		}
@@ -51,6 +53,10 @@
 
 		function getAuthPanel($result) {
 			return $this->View->getAuthPanel(@$result);
+		}
+
+		function getSetupPanel($result) {
+			return $this->View->getSetupPanel(@$result);
 		}
 
 		function getPath() {
@@ -72,7 +78,6 @@
 
 			if ($this->visit($path)) {
 				$items = $this->visit($path);
-				
 				foreach($items as $item) {
 					$item->route = (isset($_GET['route']) && $this->route($_GET['route'])) ? $_GET['route']."/".$item->alias : $item->alias;
 				}
@@ -85,10 +90,8 @@
 			if (is_file($this->route))					// se la route e' un file include
 				include($this->route);
 			else {
-				if (is_file($this->route."/tips.php"))	// se non e' una route cerca tips.php
-					include($this->route."/tips.php");
-				elseif (is_file("content/home.php")) 	// se non esiste tips prova home.php
-					include("content/home.php");
+				if (is_file($this->route."/index.php"))	
+					include($this->route."/index.php");
 			}
 		}
 

@@ -27,46 +27,55 @@
 </head>
 
 <body>
-	
-	<?php if ($Controller->getSession()) : ?>
 
-	<div id="header"> <h1> <?php echo "<i class='fa fa-align-left'></i> ".$Controller->getTitle(); ?> </h1> </div>
 
-		<div id="main_wrapper">
-			
-			<div id="nav_wrapper"> 
-				<div id="nav"> 
+	<?php if (file_exists("system/constant.json")) : ?>
+
+		<?php if ($Controller->getSession()) : ?>
+
+		<div id="header"> <h1> <?php echo "<i class='fa fa-align-left'></i> ".$Controller->getTitle(); ?> </h1> </div>
+
+			<div id="main_wrapper">
+				
+				<div id="nav_wrapper"> 
+					<div id="nav"> 
+						
+						<?php echo $Controller->getPath(); ?>
+
+						<?php echo $Controller->getLogout(); ?>
 					
-					<?php echo $Controller->getPath(); ?>
-
-					<?php echo $Controller->getLogout(); ?>
+					</div>
+				</div>
 				
+				<div id="menu_wrapper">
+					<div id="menu">
+						 <?php echo $Controller->getMenu(); ?>
+					</div>
 				</div>
-			</div>
-			
-			<div id="menu_wrapper">
-				<div id="menu">
-					 <?php echo $Controller->getMenu(); ?>
-				</div>
-			</div>
-			
-			<div id="content_wrapper">	
-				<div id="content">
-
-					<?php echo $Controller->getUserMessage(@$Controller->result); ?>
-
-					<?php echo $Controller->getContent(); ?>
 				
+				<div id="content_wrapper">	
+					<div id="content">
+
+						<?php echo $Controller->getUserMessage(@$Controller->result); ?>
+
+						<?php echo $Controller->getContent(); ?>
+					
+					</div>
 				</div>
+
 			</div>
 
-		</div>
+			<div id="footer">  <?php echo $Controller->getFooter(); ?> </div>
 
-		<div id="footer">  <?php echo $Controller->getFooter(); ?> </div>
+		<?php else : ?>
+
+		<?php echo $Controller->getAuthPanel(@$Controller->result); ?>
+
+		<?php endif; ?>
 
 	<?php else : ?>
 
-	<?php echo $Controller->getAuthPanel(@$Controller->result); ?>
+	<?php echo $Controller->getSetupPanel(@$Controller->result); ?>
 
 	<?php endif; ?>
 

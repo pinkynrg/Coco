@@ -32,6 +32,25 @@
 			return $authPanel;
 		}
 
+		function getSetupPanel($result) {
+			$setupPanel = "<div class='setup_wrapper'>";
+			$setupPanel .= "<div class='setup'>";
+			$setupPanel .= "<h2> Benvenuto su COCO </h2>";
+			$setupPanel .= "<p> Prima di iniziare ad usare COCO ho bisogno di connettermi ad un database dove salvare i dati: </p>";
+			$setupPanel .= "<form method='POST' action=''>";
+			$setupPanel .= "<input type='hidden' name='action' value='setup'>";
+			$setupPanel .= "<div><label for='db_name'>Database name</label><input type='text' name='db_name'><span>(Esempio: myDatabaseSchema)</span></div>";
+			$setupPanel .= "<div><label for='db_user'>Username</label><input type='text' name='db_user'><span>(Esempio: root)</span></div>";
+			$setupPanel .= "<div><label for='db_passowrd'>Password</label><input type='password' name='db_pass'><span>(Esempio: password)</span></div>";
+			$setupPanel .= "<div><label for='db_host'>Database Host</label><input type='text' name='db_host'><span>(Esempio: 127.0.0.1)</span></div>";
+			$setupPanel .= "<div><label for='db_prefix'>Table Prefix</label><input type='text' name='db_prefix'><span>(Esempio: myPrefix)</span></div>";
+			$setupPanel .= $this->getUserMessage(@$result);
+			$setupPanel .= "<div id='save_button'><input name='submit' type='submit' value='Salva'></div>";
+			$setupPanel .= "</div>";
+			$setupPanel .= "</div>";
+			return $setupPanel;
+		}
+
 		function getPath($path) {
 			return "<i class='fa fa-folder path'> ".str_replace("/"," / ",$path)."</i>";
 		}

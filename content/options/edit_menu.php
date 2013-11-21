@@ -1,4 +1,4 @@
-<h3></h3>
+<h3> Modifica Menu </h3>
 <p>Questa &egrave; la pagina relativa al menu ed alle relative modifiche di nuovi contenuti.</p>
 
 <?php
