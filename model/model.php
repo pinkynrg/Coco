@@ -79,8 +79,8 @@
 					 		
 					 		$con = @mysqli_connect($_POST['db_host'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_name']);
 					 		
-							if ($err = mysqli_error($con))
-								$return = new alert(0,"Qualcosa &egrave; andato storto con la connessione al server: ".$err);
+							if (mysqli_error($con))
+								$return = new alert(0,"Qualcosa &egrave; andato storto con la connessione al server: ".mysqli_error($con));
 							else {			 		
 					 			$this->createConstantFile($_POST['db_name'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_host'], $_POST['db_prefix']);
 					 			$this->createDB($con);
