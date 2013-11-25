@@ -64,7 +64,7 @@
 			return $result;
 		}
 
-		function setupConstants() {
+		function install() {
 			if ($_POST['db_name'] != '')
 				if ($_POST['db_user'] != '')
 					if ($_POST['db_pass'] != '')
@@ -75,9 +75,11 @@
 							if (!$con)
 								$return = new alert(0,"Qualcosa &egrave; andato storto con la connessione al server: ".mysqli_connect_errno());
 							else {			 		
-					 			$this->createConstantFile($_POST['db_name'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_host']);
-					 			$this->createDB($con);
-					 			$return = new alert(1,"Dati salvati con successo:<br>Accedi ora con username 'admin' e password 'password'");
+					 			$return = $this->createConstantFile($_POST['db_name'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_host']);
+				 				if ($return->type == 1) {
+				 					$this->createDB($con);
+				 					$return = new alert(1,"Dati salvati con successo:<br>Accedi ora con username 'admin' e password 'password'");
+				 				} 
 							}	
 					 	} 
 						else $return = new alert(0,"L'host deve essere inserito");
@@ -117,8 +119,19 @@
 
 			$content = json_encode($constants);
 
-			$handle = fopen("system/constant.json", 'w');
-			$result = fwrite($handle, $content);
+			$handle = @fopen("system/constant.json", 'w');
+			if ($handle) {
+				$result = fwrite($handle, $content);
+				if ($result) 
+					$result = new alert(1,"Creazione del file avvenuta con successo.");
+				else 
+					$result = new alert(0,"Scrittura del file fallita.");
+			} 
+			else {
+					$result = new alert(0,"Scrittura del file fallita. Assicurarsi che i la cartella system abbia i permessi di scrittura.");
+			}
+
+			return $result;
 		}
 
 		function checkAuth() {
@@ -319,7 +332,7 @@
 			
 				} else $result = new alert(0,"Qualcosa &egrave; andato storto durante la scittura del file.");
 		
-			} else $result = new alert(0,"Non ci sono i permessi necessari di scrittura sulla cartella backups. Assicurarsi che la cartella abbia i permessi di scrittura.");
+			} else $result = new alert(0,"Non ci sono i permessi necessari di scrittura sulla cartella backups. Assicurarsi che la cartella backups abbia i permessi di scrittura.");
 		
 			return $result;
 		}
@@ -451,15 +464,17 @@
 				$nodes->{$file}->order = $_POST["order_".$i];
 				$nodes->{$file}->perms = $_POST["perms_".$i];
 
-				$handle = fopen($path."/menu.json","wb");
-				$result = fwrite($handle, json_encode($nodes));
-
-				if ($result) {
-					$result = new alert(1,"Modifiche effettuate con successo");
-				} 
-				else {
-					$result = new alert(0,"Errore nell'effettuare le modifiche");
+				$handle = @fopen($path."/menu.json","wb");
+				
+				if ($handle) {
+					$result = fwrite($handle, json_encode($nodes));
+					if ($result)
+						$result = new alert(1,"Modifiche effettuate con successo");
+					else 
+						$result = new alert(0,"Errore nell'effettuare le modifiche");
 				}
+				else 
+					$result = new alert(0,"Errore nell'effettuare le modifiche. Assicurarsi che nella cartella contents ci siano i permessi di scrittura");
 			}
 
 			return $result;

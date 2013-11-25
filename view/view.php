@@ -45,7 +45,7 @@
 			$setupPanel .= "<div class='setup'>";
 			$setupPanel .= "<p> Prima di iniziare ad usare COCO ho bisogno di connettermi ad un database dove salvare i dati: </p>";
 			$setupPanel .= "<form method='POST' action=''>";
-			$setupPanel .= "<input type='hidden' name='action' value='setup'>";
+			$setupPanel .= "<input type='hidden' name='action' value='install'>";
 			$setupPanel .= "<div><label for='db_name'>Database name</label><input type='text' name='db_name' value='".$db_name."'><span>(Esempio: myHugeSchema)</span></div>";
 			$setupPanel .= "<div><label for='db_user'>Username</label><input type='text' name='db_user' value='".$db_user."'><span>(Esempio: root)</span></div>";
 			$setupPanel .= "<div><label for='db_passowrd'>Password</label><input type='password' name='db_pass'><span>(Esempio: batman4ever)</span></div>";
@@ -58,14 +58,16 @@
 		}
 
 		function getPath($path) {
-			return "<i class='fa fa-folder path'> ".str_replace("/"," / ",$path)."</i>";
+			return "<div class='path'><i class='fa fa-folder'></i> ".str_replace("/"," / ",$path)."</div>";
 		}
 
 		function getLogout() {
-			$logout = "<form method='POST' action='' class='logout'>";
+			$logout = "<div class='logout'>";
+			$logout .= "<form method='POST' action=''>";
 			$logout .= "<input type='hidden' value='logout' name='action'>";
 			$logout .= "<input type='submit' value='".info::$LOGOUT_LABEL."'>";
 			$logout .= "</form>";
+			$logout .= "</div>";
 			return $logout;
 		}
 

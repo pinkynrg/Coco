@@ -23,8 +23,9 @@
 		static $LOGOUT_LABEL 	= "Esci";
 
 		//paths
-		static $BASE_PATH = "/COCO";		//specify this only if COCO root is contained in a subfolder
-											// otherwise set $BASE_PATH to ""
+		
+		//specify this only if COCO root is contained in a subfolder, otherwise set $BASE_PATH to ""
+		static $BASE_PATH = "";		
 		static $CONTENT_ROOT = "content";
 		static $CONTENT_ALIAS = "home";
 

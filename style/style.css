@@ -153,8 +153,10 @@ h2, h3, h4, h5 {
 }
 
 #nav_wrapper {
-	float: left;
-	width: 100%;
+	background-image: url('../images/mini-hero-bg.png');
+	border-top: 1px solid #BDBDBD;
+	border-bottom: 1px solid #BDBDBD;
+	padding: 0px 20px 0px 20px;
 }
 
 #main_wrapper {
@@ -167,7 +169,7 @@ h2, h3, h4, h5 {
 	padding:0px;
 	float:left;
 	vertical-align: top;
-	width:16%;
+	width:25%;
 	min-height: 500px;
 }
 
@@ -177,7 +179,7 @@ h2, h3, h4, h5 {
 	float:left;
 	vertical-align: top;
 	background-size: 500px;
-	width: 84%;	
+	width: 75%;	
 	min-height: 500px;
 }
 
@@ -194,10 +196,10 @@ h2, h3, h4, h5 {
 }
 
 #nav {
-	background-image: url('../images/mini-hero-bg.png');
-	padding: 25px 20px 25px 20px;
-	border-top: 1px solid #BDBDBD;
-	border-bottom: 1px solid #BDBDBD;
+	height: 50px;
+	line-height: 50px;
+	display:table;
+	width: 100%;
 }
 
 .overlay {
@@ -252,12 +254,16 @@ h2, h3, h4, h5 {
 
 .path {
 	color: #A29D9D;
+	width:70%;
+	height: 100%;
+	display:table-cell;
 }
 
 .logout {
-	color:#EA5151;
-	float:right;
-	cursor: pointer;
+	width:30%;
+	height: 100%;
+	text-align: right;
+	display:table-cell;
 }
 
 #menu li.back:before {

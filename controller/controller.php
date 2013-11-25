@@ -30,7 +30,7 @@
 		function catchBackgroundAction() {
 
 			switch ($this->action) {
-				case 'setup' 					: $this->result = $this->Model->setupConstants();	break;
+				case 'install' 					: $this->result = $this->Model->install();			break;
 				case 'checkAuth' 				: $this->result = $this->Model->checkAuth(); 		break;
 				default : break;
 			}
@@ -121,9 +121,9 @@
 			$return = false;
 			$exploded = explode("/",$path);
 			$last = $exploded[count($exploded)-1];
-			$path = $path."/menu.json";
 			
-			if (is_file($path)) {
+			if (!is_file($path)) {
+				$path = $path."/menu.json";
 				$content = file_get_contents($path);
 				$content = json_decode($content);
 				$return = array();
