@@ -1,1 +1,2 @@
-<h3>COCO's backend</h3>
+<h3>COCO - Opzioni</h3>
+<p>Benvenuto nella backend di COCO.</p>

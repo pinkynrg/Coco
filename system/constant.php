@@ -2,16 +2,19 @@
 	
 	class info {
 
+		//DB access
 		static $DB_HOST;
 		static $DB_USER;
 		static $DB_PASS;
 		static $DB_SCHEMA;
-		static $DB_PREFIX;
+
+		//salt
+		static $SALT;
 
 		//general infos
-		static $PAGE_TITLE 	= "COCO";
-		static $TITLE 		= "COCO <span style='font-size:14px;'>alpha</span>";
-		static $ALIAS 		= "COCO";
+		static $PAGE_TITLE 	= "Pannello Agenti Fastweb";
+		static $TITLE 		= "Pannello Agenti Fastweb";
+		static $ALIAS 		= "Pannello Agenti Fastweb";
 		static $FOOTER 		= "All right reserved - COCO";
 
 		//labels
@@ -26,6 +29,8 @@
 
 		function sync() {
 
+			$SALT = sha1(md5("salty!"));
+
 			if (file_exists("system/constant.json")) {
 				$content = json_decode(file_get_contents("system/constant.json"));
 
@@ -33,7 +38,6 @@
 				self::$DB_USER 		= $content->db_user;
 				self::$DB_PASS 		= $content->db_pass;
 				self::$DB_SCHEMA 	= $content->db_name;
-				self::$DB_PREFIX 	= $content->db_prefix;
 			}
 
 		}

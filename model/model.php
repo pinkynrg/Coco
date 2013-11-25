@@ -1,26 +1,19 @@
 <?php
 
 	if (!class_exists("DB")) 		require("model/db.php");
-	if (!class_exists("smartCSV")) 	require("model/smartCSV.php");
 	if (!class_exists("error")) 	require("model/alert.php");
-	if (!class_exists("PHPExcel")) 	require("view/PHPExcel/PHPExcel.php");	
+	//if (!class_exists("PHPExcel")) 	require("view/PHPExcel/PHPExcel.php");	
 
-	class Model {
-
-		function __construct($controller) {
-			$this->controller = $controller;
-			$this->db = new DB();
-			$this->csvHelper = new smartCSV();
-		}
+	class Model extends db {
 
 		function dropTable($name) {
-			$this->db->setQuery("drop table `".$name."`;");
-			return $this->db->query();
+			$this->setQuery("drop table `".$name."`;");
+			return $this->query();
 		}
 
 		function emptyTable($name) {	
-			$this->db->setQuery("delete from `".$name."`;");
-			return $this->db->query();
+			$this->setQuery("delete from `".$name."`;");
+			return $this->query();
 		}
 
 		function createTable($name, $header, $pk) {
@@ -36,9 +29,9 @@
 			else
 				$query .= "PRIMARY KEY (`".$header[$pk]."`) );";
 
-			$this->db->setQuery($query);
+			$this->setQuery($query);
 
-			return $this->db->query();
+			return $this->query();
 		}
 
 		function insertIntoTable($name, $where, $content) {
@@ -63,9 +56,9 @@
 					else $query .= ");";
 				}
 
-				$this->db->setQuery($query);
+				$this->setQuery($query);
 				
-				if ($result) $result = $this->db->query();
+				if ($result) $result = $this->query();
 			}
 
 			return $result;
@@ -79,12 +72,12 @@
 					 		
 					 		$con = @mysqli_connect($_POST['db_host'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_name']);
 					 		
-							if (mysqli_error($con))
-								$return = new alert(0,"Qualcosa &egrave; andato storto con la connessione al server: ".mysqli_error($con));
+							if (!$con)
+								$return = new alert(0,"Qualcosa &egrave; andato storto con la connessione al server: ".mysqli_connect_errno());
 							else {			 		
-					 			$this->createConstantFile($_POST['db_name'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_host'], $_POST['db_prefix']);
+					 			$this->createConstantFile($_POST['db_name'], $_POST['db_user'], $_POST['db_pass'], $_POST['db_host']);
 					 			$this->createDB($con);
-					 			$return = new alert(1,"Salvataggio dei dati d'accesso effetuati con successo");
+					 			$return = new alert(1,"Dati salvati con successo:<br>Accedi ora con username 'admin' e password 'password'");
 							}	
 					 	} 
 						else $return = new alert(0,"L'host deve essere inserito");
@@ -115,13 +108,12 @@
 			return $result;
 		}
 
-		function createConstantFile($db_name, $db_user, $db_pass, $db_host, $db_prefix) {
+		function createConstantFile($db_name, $db_user, $db_pass, $db_host) {
 			$constants = new stdClass();
 			$constants->db_name = $db_name;
 			$constants->db_user = $db_user;
 			$constants->db_pass = $db_pass;
 			$constants->db_host = $db_host;
-			$constants->db_prefix = $db_prefix;
 
 			$content = json_encode($constants);
 
@@ -144,7 +136,7 @@
 					$query = $conn->prepare("SELECT * FROM `users` WHERE `username` = :username AND `password` = :password");
 
 					$query->bindParam(':username', $_POST['username']);
-					$query->bindParam(':password', $_POST['password']);
+					$query->bindParam(':password', md5($_POST['password'].info::$SALT));
 
 					$query->execute();
 
@@ -214,9 +206,20 @@
 			return $result;
 		}
 
+		function CSVtoArray($link, $separator) {
+			$array = array();
+			if (file_exists($link) && is_readable($link)) {
+				if (($handle = fopen($link, 'r')) !== FALSE) {
+					while (($row = fgetcsv($handle, 1000, $separator)) !== FALSE)
+						$array[] = $row;
+				}
+			}
+			return $array;
+		}
+
 		function CSVtoSql($link, $separator, $name, $pk, $drop = false, $cols = null, $header = null) {
 
-			$content = $this->csvHelper->CSVtoArray($link, $separator);
+			$content = $this->CSVtoArray($link, $separator);
 			$passed = true;
 
 			if ($content) {
@@ -252,16 +255,16 @@
 
 		function backup($tables = '*'){
 			
-			$this->db->thin =true;
+			$this->thin =true;
 
 			$return = "";
 
 			//get all of the tables
 			if($tables == '*') {
 				$tables = array();
-				$this->db->setQuery('SHOW TABLES');
-				$this->db->query(false);
-				$tables = $this->db->result;
+				$this->setQuery('SHOW TABLES');
+				$this->query(false);
+				$tables = $this->result;
 			}
 			else {
 				$tables = is_array($tables) ? $tables : explode(',',$tables);
@@ -270,15 +273,15 @@
 			//cycle through
 			foreach($tables as $table) {
 				$return .= "DROP TABLE IF EXISTS `".$table."`;\n\n";
-				$this->db->setQuery("SHOW CREATE TABLE ".$table);
-				$this->db->query(false);
-				$return .= $this->db->result[0][1].";\n";
+				$this->setQuery("SHOW CREATE TABLE ".$table);
+				$this->query(false);
+				$return .= $this->result[0][1].";\n";
 
-				$this->db->setQuery("SELECT * FROM ".$table);
-				$this->db->query(false);
+				$this->setQuery("SELECT * FROM ".$table);
+				$this->query(false);
 
-				$result = $this->db->result;
-				$num_fields = isset($this->db->result[0]) ? count($this->db->result[0]) : 0;
+				$result = $this->result;
+				$num_fields = isset($this->result[0]) ? count($this->result[0]) : 0;
 
 				$return .= "\n\nLOCK TABLES `".$table."` WRITE;\n\n";
 
@@ -297,7 +300,7 @@
 
 				$return.="UNLOCK TABLES;\n\n\n";
 
-				$this->db->thin =false;
+				$this->thin =false;
 
 			}
 			
@@ -316,7 +319,7 @@
 			
 				} else $result = new alert(0,"Qualcosa &egrave; andato storto durante la scittura del file.");
 		
-			} else $result = new alert(0,"Non ci sono i permessi necessari di scrittura sulla cartella backups.");
+			} else $result = new alert(0,"Non ci sono i permessi necessari di scrittura sulla cartella backups. Assicurarsi che la cartella abbia i permessi di scrittura.");
 		
 			return $result;
 		}
@@ -325,8 +328,8 @@
 			if (isset($_POST['backup'])) {
 				$path = "backups/".$_POST['backup'];
 				$query = file_get_contents($path);
-				$this->db->setQuery($query);
-				$result = $this->db->multiquery();
+				$this->setQuery($query);
+				$result = $this->multiquery();
 				if ($result->type)
 					$result = new alert(1,"Restore dei dati effettuato con successo.");
 			}
@@ -340,16 +343,18 @@
 		function scanDirectory($dir, $show_all = false) {
 			$scan = scandir($dir);
 			$accepted = array("directory","text/x-php","text/html","text/plain","inode/x-empty");
-			$black_list = array(".","..","menu.json","index.php");
+			$black_list = array(".","..","menu.json","index.php", ".DS_Store","._.DS_Store");
 
 			foreach($scan as $key => $node) {
-				if (!in_array(finfo_file(finfo_open(FILEINFO_MIME_TYPE),$dir."/".$node), $accepted)) {
-					unset($scan[$key]);
-				}
-				else if (in_array($node, $black_list))
-					unset($scan[$key]);
-				else if ($show_all){
-					$scan[$key] = $dir."/".$scan[$key];
+				// if (!in_array(finfo_file(finfo_open(FILEINFO_MIME_TYPE),$dir."/".$node), $accepted)) {
+				// 	unset($scan[$key]);
+				// }
+				// else 
+					if (in_array($node, $black_list))
+						unset($scan[$key]);
+					else 
+						if ($show_all){
+							$scan[$key] = $dir."/".$scan[$key];
 				}
 			}
 
@@ -377,7 +382,7 @@
 				$map->{$node}->url = $root."/".$node;
 				$map->{$node}->label = isset($old_map->{$node}->label) ? $old_map->{$node}->label : $node;
 				$map->{$node}->alias = isset($old_map->{$node}->alias) ? $old_map->{$node}->alias : $node;
-				$map->{$node}->type  = finfo_file(finfo_open(FILEINFO_MIME_TYPE),$root."/".$node);
+				$map->{$node}->type  = NULL; //finfo_file(finfo_open(FILEINFO_MIME_TYPE),$root."/".$node);
 				$map->{$node}->order = isset($old_map->{$node}->order) ? $old_map->{$node}->order : $counter;
 				$map->{$node}->perms = isset($old_map->{$node}->perms) ? $old_map->{$node}->perms : "10000";
 
@@ -468,8 +473,8 @@
 				$query =  "UPDATE `users` SET `access_level`='".$_POST["level_".$i]."'";
 				$query .= "WHERE `id`='".$_POST["id_".$i]."'";
 				
-				$this->db->setQuery($query);
-				$result = $this->db->query(); 
+				$this->setQuery($query);
+				$result = $this->query(); 
 
 				if ($result->type)
 					$result = new alert(1,"Aggiornamento degli accessi effettuato con successo.");
@@ -487,9 +492,9 @@
 								if ($_POST['password2'] != '')
 									if ($_POST['password'] == $_POST['password2']) 
 										if ($_POST['access_level'] != '') {
-											$query = "INSERT INTO users (username,password,name, lastname,access_level) VALUES('".$_POST['username']."','".$_POST['password']."','".$_POST['nome']."','".$_POST['cognome']."','".$_POST['access_level']."')";
-											$this->db->setQuery($query);
-											$result = $this->db->query();
+											$query = "INSERT INTO users (username, password, name, lastname, access_level) VALUES('".$_POST['username']."','".md5(info::$SALT.$_POST['password'])."','".$_POST['nome']."','".$_POST['cognome']."','".$_POST['access_level']."')";
+											$this->setQuery($query);
+											$result = $this->query();
 											if ($result->type != 0) {
 												$result = new alert(1, "Nuovo utente inserito con successo");
 											}

@@ -1,9 +1,33 @@
+#default index
+DirectoryIndex index.php
+
+#set time zone
+SetEnv TZ Europe/Rome
+
+#set email sysadmin
+ServerSignature EMail
+SetEnv SERVER_ADMIN francesco.meli@intecom.it
+
+#disable directory browsing
+Options All -Indexes
+
+#define charset
+#AddDefaultCharset UTF-8
+
+#adds pages for certain errors
+#ErrorDocument 400 /400.html
+#ErrorDocument 401 /401.html
+#ErrorDocument 403 /403.html
+
 Options +FollowSymLinks
 RewriteEngine On
 RewriteBase /
 
-RewriteCond %{REQUEST_FILENAME} !-f
+# always add 
+#RewriteCond %{HTTP_HOST} ^coco.it [NC]
+#RewriteRule ^(.*)$ local.$1 [R=301]
 
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?route=$1 [NC]
 
 php_value max_input_vars 2000

@@ -5,17 +5,17 @@
 <?php 
 
 $query = "SELECT * FROM access_levels";
-$this->Model->db->setQuery($query);
-$this->Model->db->query(false);
-$levels = $this->Model->db->result;
+$this->Model->setQuery($query);
+$this->Model->query(false);
+$levels = $this->Model->result;
 
 $query = "	SELECT id,`name`, lastname, username, access_level
 			FROM users as u
 			LEFT JOIN access_levels as al ON al.grade = u.access_level";
 
-$this->Model->db->setQuery($query);
-$this->Model->db->query();
-$contents = $this->Model->db->result;
+$this->Model->setQuery($query);
+$this->Model->query();
+$contents = $this->Model->result;
 
 $header   		= array("Id","Nome","Cognome","Username","Livello d'accesso");
 $widths   		= array("5%","23%","24%","24%","24%");

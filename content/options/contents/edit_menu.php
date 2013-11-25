@@ -2,6 +2,7 @@
 <p>Questa &egrave; la pagina relativa al menu ed alle relative modifiche di nuovi contenuti.</p>
 
 <?php
+
 echo "<form method='POST' action=''>";
 echo "<input type='hidden' value='pullMenu' name='action'>";
 echo "<input type='submit' value='Pull Menu'>";

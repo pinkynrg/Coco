@@ -1,0 +1,1 @@
+{"backup_db.php":{"url":"content\/options\/backup\/backup_db.php","label":"Crea un Backup","alias":"backup-db","type":null,"order":"0","perms":"10000"},"restore_db.php":{"url":"content\/options\/backup\/restore_db.php","label":"Restore un Backup","alias":"restore-db","type":null,"order":"1","perms":"10000"}}

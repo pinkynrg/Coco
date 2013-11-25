@@ -33,7 +33,7 @@
 
 		<?php if ($Controller->getSession()) : ?>
 
-		<div id="header"> <h1> <?php echo "<i class='fa fa-align-left'></i> ".$Controller->getTitle(); ?> </h1> </div>
+		<div id="header"> <h1> <?php echo $Controller->getTitle(); ?> </h1> </div>
 
 			<div id="main_wrapper">
 				

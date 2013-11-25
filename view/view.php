@@ -17,7 +17,8 @@
 		}
 
 		function getAuthPanel($result) {
-			$authPanel  = "<div class='auth_panel_wrapper'>";
+			$authPanel  = "<img id='logo' src='/images/coco_logo.png'>";
+			$authPanel .= "<div class='auth_panel_wrapper'>";
 			$authPanel .= "<div class='auth_panel'>";
 			$authPanel .= "<h2><i class='fa fa-lock'></i> ".info::$TITLE."</h2>";
 			$authPanel .= "<form method='POST' action=''>";
@@ -33,17 +34,22 @@
 		}
 
 		function getSetupPanel($result) {
-			$setupPanel = "<div class='setup_wrapper'>";
+
+			$db_name = isset($_POST['db_name']) ? $_POST['db_name'] : '';
+			$db_user = isset($_POST['db_user']) ? $_POST['db_user'] : '';
+			$db_host = isset($_POST['db_host']) ? $_POST['db_host'] : '';
+			$db_prefix = isset($_POST['db_prefix']) ? $_POST['db_prefix'] : '';
+
+			$setupPanel = "<img id='logo' src='/images/coco_logo.png'>";
+			$setupPanel .= "<div class='setup_wrapper'>";
 			$setupPanel .= "<div class='setup'>";
-			$setupPanel .= "<h2> Benvenuto su COCO </h2>";
 			$setupPanel .= "<p> Prima di iniziare ad usare COCO ho bisogno di connettermi ad un database dove salvare i dati: </p>";
 			$setupPanel .= "<form method='POST' action=''>";
 			$setupPanel .= "<input type='hidden' name='action' value='setup'>";
-			$setupPanel .= "<div><label for='db_name'>Database name</label><input type='text' name='db_name'><span>(Esempio: myDatabaseSchema)</span></div>";
-			$setupPanel .= "<div><label for='db_user'>Username</label><input type='text' name='db_user'><span>(Esempio: root)</span></div>";
-			$setupPanel .= "<div><label for='db_passowrd'>Password</label><input type='password' name='db_pass'><span>(Esempio: password)</span></div>";
-			$setupPanel .= "<div><label for='db_host'>Database Host</label><input type='text' name='db_host'><span>(Esempio: 127.0.0.1)</span></div>";
-			$setupPanel .= "<div><label for='db_prefix'>Table Prefix</label><input type='text' name='db_prefix'><span>(Esempio: myPrefix)</span></div>";
+			$setupPanel .= "<div><label for='db_name'>Database name</label><input type='text' name='db_name' value='".$db_name."'><span>(Esempio: myHugeSchema)</span></div>";
+			$setupPanel .= "<div><label for='db_user'>Username</label><input type='text' name='db_user' value='".$db_user."'><span>(Esempio: root)</span></div>";
+			$setupPanel .= "<div><label for='db_passowrd'>Password</label><input type='password' name='db_pass'><span>(Esempio: batman4ever)</span></div>";
+			$setupPanel .= "<div><label for='db_host'>Database Host</label><input type='text' name='db_host' value='".$db_host."'><span>(Esempio: localhost)</span></div>";
 			$setupPanel .= $this->getUserMessage(@$result);
 			$setupPanel .= "<div id='save_button'><input name='submit' type='submit' value='Salva'></div>";
 			$setupPanel .= "</div>";

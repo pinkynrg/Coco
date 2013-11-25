@@ -1,0 +1,1 @@
+{"add_user.php":{"url":"content\/options\/users\/add_user.php","label":"Aggiungi un utente","alias":"add-user","type":null,"order":"0","perms":"10000"},"edit_access_levels.php":{"url":"content\/options\/users\/edit_access_levels.php","label":"Modifica permessi di Accesso","alias":"edit-access-levels","type":null,"order":"1","perms":"10000"}}

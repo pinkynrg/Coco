@@ -1,1 +1,1 @@
-{"options":{"url":"content\/options","label":"Opzioni","alias":"options","type":"directory","order":"0","perms":"10000"},"setPreliminaryInfo.php":{"url":"content\/setPreliminaryInfo.php","label":"Setup","alias":"setup","type":"inode\/x-empty","order":"1","perms":"10000"}}
+{"options":{"url":"content\/options","label":"Opzioni","alias":"opzioni","type":null,"order":"0","perms":"10000"}}
