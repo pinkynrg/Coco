@@ -17,7 +17,7 @@
 		}
 
 		function getAuthPanel($result) {
-			$authPanel  = "<img id='logo' src='/images/coco_logo.png'>";
+			$authPanel  = "<img id='logo' src='".$this->getLogo()."'>";
 			$authPanel .= "<div class='auth_panel_wrapper'>";
 			$authPanel .= "<div class='auth_panel'>";
 			$authPanel .= "<h2><i class='fa fa-lock'></i> ".info::$TITLE."</h2>";
@@ -40,7 +40,7 @@
 			$db_host = isset($_POST['db_host']) ? $_POST['db_host'] : '';
 			$db_prefix = isset($_POST['db_prefix']) ? $_POST['db_prefix'] : '';
 
-			$setupPanel = "<img id='logo' src='/images/coco_logo.png'>";
+			$setupPanel = "<img id='logo' src='".$this->getLogo()."'>";
 			$setupPanel .= "<div class='setup_wrapper'>";
 			$setupPanel .= "<div class='setup'>";
 			$setupPanel .= "<p> Prima di iniziare ad usare COCO ho bisogno di connettermi ad un database dove salvare i dati: </p>";
@@ -74,10 +74,10 @@
 			$menu .= "<ul>";
 
 			foreach($items as $item)
-				$menu .= "<a href='/".$item->route."'><li>".$item->label. "</li></a>";
+				$menu .= "<a href='".info::$BASE_PATH."/".$item->route."'><li>".$item->label. "</li></a>";
 
 			if (!is_null($back))
-				$menu .= "<a href='/".$back."'><li class='back'>".info::$MENU_BACK_LABEL."</li></a>";
+				$menu .= "<a href='".info::$BASE_PATH."/".$back."'><li class='back'>".info::$MENU_BACK_LABEL."</li></a>";
 
 			$menu .= "</ul>";
 
@@ -173,6 +173,10 @@
 				}
 
 			return $status;
+		}
+
+		function getLogo() {
+			return info::$BASE_PATH."/images/coco_logo.png";
 		}
 	}
 

@@ -32,9 +32,10 @@
 			switch ($this->action) {
 				case 'setup' 					: $this->result = $this->Model->setupConstants();	break;
 				case 'checkAuth' 				: $this->result = $this->Model->checkAuth(); 		break;
+				default : break;
 			}
 
-			if ($this->getSession())
+			if ($this->getSession()) {
 				switch ($this->action) {
 					case 'logout' 	 			: unset($_SESSION['username']); session_destroy(); $this->result = new alert(1, "Logout effettuato con successo."); break;
 					case 'updateAccessLevels'	: $this->result = $this->Model->updateAccessLevels();			break;
@@ -42,9 +43,10 @@
 					case 'backup'				: $this->result = $this->Model->backup();		 				break;
 					case 'restoreBackup' 		: $this->result = $this->Model->restoreBackup(); 				break;
 					case 'pullMenu' 			: $this->result = $this->Model->pullMenu(info::$CONTENT_ROOT);	break;
-					case 'addUser' 				: $this->result = $this->Model->addUser();							break;
+					case 'addUser' 				: $this->result = $this->Model->addUser();						break;
 					default : break;
 				}
+			}	
 		}
 
 		function getUserMessage($result) {
@@ -113,6 +115,8 @@
 			return $this->View->getFooter();
 		}
 
+
+		// ???
 		private function visit($path) {
 			$return = false;
 			$exploded = explode("/",$path);
@@ -141,7 +145,8 @@
 
 			return $return;
 		}
-
+		
+		// ???
 		function route($route) {
 			$exploded = explode("/",$route);
 			$accessible = true;

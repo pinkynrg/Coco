@@ -19,10 +19,10 @@
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<script src="/assets/assets.js"></script>
+	<script src="<?php echo info::$BASE_PATH.'/assets/assets.js'; ?>"></script>
 
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.2/css/font-awesome.css" rel="stylesheet">
-	<link type="text/css" href="/style/style.css" rel="stylesheet"/>
+	<link type="text/css" href="<?php echo info::$BASE_PATH.'/style/style.css'; ?>" rel="stylesheet"/>
 
 </head>
 
