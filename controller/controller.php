@@ -21,6 +21,10 @@
 			else 
 				$this->action = null;
 
+			if ($this->Model) {
+				$this->View->getUserMessage($this->Model);
+			}
+
 		}
 
 		function getSession() {

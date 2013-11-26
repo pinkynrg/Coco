@@ -30,13 +30,13 @@
 
 	<input type="hidden" value="addUser" name="action">
 
-	<div> <label for="nome"> Nome </label> <input type="text" name="nome" value="<?php echo $nome; ?>"> <span class="mandatory_field"> - obbligatorio </span></div>
-	<div> <label for="cognome"> Cognome  </label> <input type="text" name="cognome" value="<?php echo $cognome; ?>"> <span class="mandatory_field"> - obbligatorio </span></div>
-	<div> <label for="username"> Username </label> <input type="text" name="username" value="<?php echo $username; ?>"> <span class="mandatory_field"> - obbligatorio </span></div>
-	<div> <label for="e-mail"> E-mail </label> <input type="text" name="email" value="<?php echo $email; ?>"> <span class="mandatory_field"> - obbligatorio </span></div>
-	<div> <label for="password"> Password </label> <input type="password" name="password"> <span class="mandatory_field"> - obbligatorio </span></div>
-	<div> <label for="password2"> Ripetere Password </label> <input type="password" name="password2"> <span class="mandatory_field"> - obbligatorio </span></div>
-	<div> <label for="access_level"> Accesso </label> <?php echo getSelect($access_levels, "access_level", $access_level); ?> <span class="mandatory_field"> - obbligatorio </span></div>
-	<input type="submit" value="Aggiungi utente">
+	<div> <label for="nome"> Nome </label> <input type="text" name="nome" value="<?php echo $nome; ?>"> </div>
+	<div> <label for="cognome"> Cognome  </label> <input type="text" name="cognome" value="<?php echo $cognome; ?>"> </div>
+	<div> <label for="username"> Username </label> <input type="text" name="username" value="<?php echo $username; ?>"> </div>
+	<div> <label for="e-mail"> E-mail </label> <input type="text" name="email" value="<?php echo $email; ?>"> </div>
+	<div> <label for="password"> Password </label> <input type="password" name="password"> </div>
+	<div> <label for="password2"> Ripetere Password </label> <input type="password" name="password2"> </div>
+	<div> <label for="access_level"> Accesso </label> <?php echo getSelect($access_levels, "access_level", $access_level); ?> </div>
+	<div> <label for="submit"></label><input type="submit" value="Aggiungi utente" name="submit"></div>
 
 </form>

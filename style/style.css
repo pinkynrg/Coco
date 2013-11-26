@@ -6,7 +6,7 @@ body {
 	padding:0px;
 	min-width: 1200px;
 	font-family: verdana;
-	background-color: #FFFDFD;
+	background-color: #F8F8F8;
 }
 
 a, a:hover {
@@ -43,7 +43,8 @@ form.short input[type='submit'] {
 }
 
 #header {
-	background-color: #FDFDFD;
+	margin: 30px 0px 30px 0px;
+	text-align: center;
 }
 
 #header h1 {
@@ -78,10 +79,11 @@ h2, h3, h4, h5 {
 .auth_panel_wrapper {
 	margin: auto;
 	margin-top: 50px;
-	width: 400px;
+	width: 410px;
 	height: auto;
 	background-color: white;
 	border: 1px solid #D6D6D6;
+	box-shadow: 5px 5px 20px #888;
 }
 
 .auth_panel {
@@ -101,6 +103,7 @@ h2, h3, h4, h5 {
 	height: auto;
 	background-color: white;
 	border: 1px solid #D6D6D6;
+	box-shadow: 5px 5px 20px #888;
 }
 
 .setup {
@@ -161,26 +164,30 @@ h2, h3, h4, h5 {
 
 #main_wrapper {
 	margin: auto;
-	/*overflow: hidden;*/
+	width:100%;
+	float:left;
+	overflow: hidden;
+	background-color: #FFFFFF;
 }
 
 #menu_wrapper {
 	margin:0px;
 	padding:0px;
+	white-space:nowrap;
 	float:left;
 	vertical-align: top;
-	width:25%;
+	width:250px;
 	min-height: 500px;
 }
 
 #content_wrapper {
 	margin:0px;
 	padding:0px;
-	float:left;
+	white-space:nowrap;
 	vertical-align: top;
-	background-size: 500px;
-	width: 75%;	
+	text-overflow:ellipsis;
 	min-height: 500px;
+	overflow:hidden;
 }
 
 #footer {
@@ -233,6 +240,9 @@ h2, h3, h4, h5 {
 	background-color: #F0F0F0;
 	background-image: url('../images/mini-hero-bg.png');
     border: 1px solid #D5D5D5;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 
 #menu li span {
@@ -473,19 +483,26 @@ h2, h3, h4, h5 {
 	margin: 0px 0px 10px 0px;
 }
 
+.status_panel.error, .status_panel.success, .status_panel.alert, .search_panel, .list {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
 .status_panel.error {
 	border: 1px solid #F34B4B;
 	background-color: #FF8989;
 	color: #B80303;
 }
 
-.status_panel.success{
+.status_panel.success {
 	border: 1px solid #1DE915;
 	background-color: #C2FDBD;
 	color: #0B8F06;
 }
 
-.status_panel.alert{
+.status_panel.alert {
 	border: 1px solid #FF8500;
 	background-color: #FFB24F;
 	color: #815B0A;
@@ -496,7 +513,7 @@ h2, h3, h4, h5 {
 }
 
 #logo {
-width: 400px;
+width: 450px;
 margin: 50px auto;
 display: block;
 }

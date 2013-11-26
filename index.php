@@ -62,7 +62,7 @@
 					
 					</div>
 				</div>
-
+				<div style="clear:both;"></div>
 			</div>
 
 			<div id="footer">  <?php echo $Controller->getFooter(); ?> </div>

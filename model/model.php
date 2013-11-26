@@ -141,25 +141,33 @@
 
 			if (isset($username)&&(isset($password))) {
 				if (($username!="")&&($password!="")) {
-
-					$conn = new PDO('mysql:dbname='.info::$DB_SCHEMA.';host='.info::$DB_HOST.';charset=utf8', info::$DB_USER, info::$DB_PASS);
-					$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-					$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-					$query = $conn->prepare("SELECT * FROM `users` WHERE `username` = :username AND `password` = :password");
-
-					$query->bindParam(':username', $_POST['username']);
-					$query->bindParam(':password', md5($_POST['password'].info::$SALT));
-
-					$query->execute();
-
-					$query_result = $query->fetch();
-
-					if ($query_result['username'] != "") {
-						$this->setupSession($query_result['username'], $query_result['name'], $query_result['lastname'], $query_result['access_level']);
-						$result = new alert(1,"Accesso effettuato con successo.");
+					
+					try {
+						$conn = @new PDO('mysql:host='.info::$DB_HOST.';dbname='.info::$DB_SCHEMA, info::$DB_USER, info::$DB_PASS);
+						$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+						$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);				// Set Errorhandling to Exception
 					} 
-					else $result = new alert(0,"Nome utente e / o password errato.");
+					catch (PDOException $e) {
+						$conn = false;
+					}
+
+					if ($conn) {
+						$query = $conn->prepare("SELECT * FROM `users` WHERE `username` = :username AND `password` = :password");
+
+						$query->bindParam(':username', $_POST['username']);
+						$query->bindParam(':password', md5($_POST['password'].info::$SALT));
+
+						$query->execute();
+
+						$query_result = $query->fetch();
+
+						if ($query_result['username'] != "") {
+							$this->setupSession($query_result['username'], $query_result['name'], $query_result['lastname'], $query_result['access_level']);
+							$result = new alert(1,"Accesso effettuato con successo.");
+						} 
+						else $result = new alert(0,"Nome utente e / o password errato.");
+					}
+					else $result = new alert(0,"Impossibile collegarsi al server MySQL.");
 				}
 				else
 					$result = new alert(2,"Campi vuoti non validi.");
